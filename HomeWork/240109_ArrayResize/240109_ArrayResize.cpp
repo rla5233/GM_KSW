@@ -38,13 +38,40 @@ public:
             MsgBoxAssert("Array Range Error!");
         }
 
+        //////////////////////////
+        int* Temp = nullptr;
+        Temp = new int[_Size];
+
+        if (Temp == nullptr)
+        {
+            MsgBoxAssert("Memory Allocation Error!");
+        }
+
+        if (NumValue < _Size)
+        {
+            for (int i = 0; i < NumValue; i++)
+            {
+                Temp[i] = ArrPtr[i];
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _Size; i++)
+            {
+                Temp[i] = ArrPtr[i];
+            }
+        }
+        ///////////////////////////
+
+
         if (ArrPtr != nullptr)
         {
             Release();
         }
 
-        ArrPtr = new int[_Size];
+        ArrPtr = Temp;
         NumValue = _Size;
+        Temp = nullptr;
     }
 
     void Copy(const IntArray& _Other)
@@ -79,6 +106,7 @@ private:
 
 int main()
 {
+    LeakCheck;
     IntArray NewArray = IntArray(5);
 
     for (int i = 0; i < NewArray.Num(); i++)
@@ -87,18 +115,29 @@ int main()
     }
     // [0][1][2][3][4]
 
+
+    for (int i = 0; i < NewArray.Num(); i++)
+    {
+        std::cout << NewArray[i] << " ";
+    }
+
     NewArray.ReSize(10);
     // ? 는 무슨값이 들어 있어도 괜찮다.
     // [0][1][2][3][4][?][?][?][?][?] -> 원하는 결과
 
     // 1. 왜 결과가 다른가? 분석하기
+    // -> 새로운 영역을 공간만 할당하고 원본값을 복사하진 않았기 때문
+    // 
     // 2. 원하는 결과로 나오도록 출력
+    // 
     // 3. 기존에 존재하는 값을 보존하면서 확장할수 있게 만들어라
+    // 
     // 4. ReSize 인수값은 작아질수도 커질수도 있다.
 
 
+    std::cout << std::endl;
     for (int i = 0; i < NewArray.Num(); i++)
     {
-        std::cout << NewArray[i] << std::endl;
+        std::cout << NewArray[i] << " ";
     }
 }
