@@ -1,74 +1,30 @@
 ﻿#include <iostream>
 #include <ConsoleEngine/EngineDebug.h>
 
-//#define SHALLOW
-
 class IntArray
 {
-    // private: // 디폴트 접근제한 지정자
+
 public:
-    // 디폴트 생성자
-    //IntArray()
-    //{}
 
     IntArray(int _Size)
     {
         ReSize(_Size);
     }
 
-    // 디폴트 복사 생성자
-    //IntArray(const IntArray& _Other)
-    //{}
-
-#ifdef SHALLOW
-    IntArray(const IntArray& _Other)
-    {
-        ReSize(_Other.NumValue);
-        for (int i = 0; i < NumValue; i++)
-        {
-            ArrPtr[i] = _Other.ArrPtr[i];
-        }
-    }
-#else
     IntArray(const IntArray& _Other)
     {
         Copy(_Other);
     }
-#endif
-
-    // 디폴트 소멸자
-    //~IntArray()
-    //{}
 
     ~IntArray()
     {
         Release();
     }
 
-    // 디폴트 대입연산자
-    //void operator= (const IntArray& _Other)
-    //{}
-
-
-#ifdef SHALLOW
-    // 얕은 복사 (Shallow Copy)
-    // 1. 참조만 복사하는 복사
-    // 깊은 복사가 더 좋아 얕은 복사는 나빠 -> 이건 아니다. 상황에따라 써야한다.
-    void operator= (const IntArray& _Other)
-    {
-        NumValue = _Other.NumValue;
-        ArrPtr = _Other.ArrPtr;
-    }
-#else
-    // 깊은 복사 (Deep Copy)
-    // 1. 참조의 내부에 존재하는 값을 복사하는 복사
-    // 2. 내부에 있는 값을 메모리를 동일하게 할당해 복사하는 복사
     void operator= (const IntArray& _Other)
     {
         Copy(_Other);
     }
-#endif
-
 
     int& operator[](int _Count)
     {
@@ -123,19 +79,26 @@ private:
 
 int main()
 {
-    IntArray NewArray = IntArray(10);
+    IntArray NewArray = IntArray(5);
 
     for (int i = 0; i < NewArray.Num(); i++)
     {
         NewArray[i] = i;
     }
+    // [0][1][2][3][4]
 
+    NewArray.ReSize(10);
+    // ? 는 무슨값이 들어 있어도 괜찮다.
+    // [0][1][2][3][4][?][?][?][?][?] -> 원하는 결과
+
+    // 1. 왜 결과가 다른가? 분석하기
+    // 2. 원하는 결과로 나오도록 출력
+    // 3. 기존에 존재하는 값을 보존하면서 확장할수 있게 만들어라
+    // 4. ReSize 인수값은 작아질수도 커질수도 있다.
 
 
     for (int i = 0; i < NewArray.Num(); i++)
     {
         std::cout << NewArray[i] << std::endl;
     }
-
-
 }
