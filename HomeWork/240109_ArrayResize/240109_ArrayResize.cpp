@@ -47,19 +47,10 @@ public:
             MsgBoxAssert("Memory Allocation Error!");
         }
 
-        if (NumValue < _Size)
+        int Size = NumValue < _Size ? NumValue : _Size;
+        for (int i = 0; i < Size; i++)
         {
-            for (int i = 0; i < NumValue; i++)
-            {
-                Temp[i] = ArrPtr[i];
-            }
-        }
-        else
-        {
-            for (int i = 0; i < _Size; i++)
-            {
-                Temp[i] = ArrPtr[i];
-            }
+            Temp[i] = ArrPtr[i];
         }
         ///////////////////////////
 
@@ -121,7 +112,7 @@ int main()
         std::cout << NewArray[i] << " ";
     }
 
-    NewArray.ReSize(10);
+    NewArray.ReSize(2);
     // ? 는 무슨값이 들어 있어도 괜찮다.
     // [0][1][2][3][4][?][?][?][?][?] -> 원하는 결과
 

@@ -15,19 +15,18 @@ private:
 		ListNode* Prev = nullptr;
 	};
 
-public:
-	class iterator
+	class iterator_Base
 	{
 		friend MyList;
 	public:
-		iterator()
+		iterator_Base()
 		{}
 
-		iterator(ListNode* _CurNode)
+		iterator_Base(ListNode* _CurNode)
 			: CurNode(_CurNode)
 		{}
 
-		bool operator!=(const iterator& _Other)
+		bool operator!=(const iterator_Base& _Other)
 		{
 			return CurNode != _Other.CurNode;
 		}
@@ -37,33 +36,40 @@ public:
 			return CurNode->Data;
 		}
 
-		// 연산자 겹지정 중에 
-		virtual void operator++()
-		{
-			CurNode = CurNode->Next;
-		}
-
 	private:
 		ListNode* CurNode = nullptr;
 	};
 
-	class reverse_iterator : public iterator
+public:
+	class iterator : public iterator_Base
+	{
+	public:
+		iterator()
+		{}
+
+		iterator(ListNode* _CurNode)
+			: iterator_Base(_CurNode)
+		{}
+
+		// 연산자 겹지정 중에 
+		void operator++()
+		{
+			CurNode = CurNode->Next;
+		}
+	};
+
+	class reverse_iterator : public iterator_Base
 	{
 	public:
 		reverse_iterator()
 		{}
 
 		reverse_iterator(ListNode* _CurNode)
-			: iterator(_CurNode)
+			: iterator_Base(_CurNode)
 		{}
 
-		bool operator!=(const reverse_iterator& _Other)
-		{
-			return CurNode != _Other.CurNode;
-		}
-
 		// 연산자 겹지정 중에 
-		void operator++() override
+		void operator++()
 		{
 			CurNode = CurNode->Prev;
 		}
