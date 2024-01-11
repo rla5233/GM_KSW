@@ -111,7 +111,7 @@ int main()
 
     for (int i = 0; i < NewArray.Num(); i++)
     {
-        NewArray[i] = i;
+        NewArray[i] = 1;
     }
     // [0][1][2][3][4]
 

@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleEngine", "ConsoleEng
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "240109_ArrayResize", "240109_ArrayResize\240109_ArrayResize.vcxproj", "{FC1FFFDD-C4C4-4593-83C4-DB3F5AEA333B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "240111_RList", "240111_RList\240111_RList.vcxproj", "{0761C8A5-070F-4CB0-9902-7CC5DE27BF84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -35,6 +37,14 @@ Global
 		{FC1FFFDD-C4C4-4593-83C4-DB3F5AEA333B}.Release|x64.Build.0 = Release|x64
 		{FC1FFFDD-C4C4-4593-83C4-DB3F5AEA333B}.Release|x86.ActiveCfg = Release|Win32
 		{FC1FFFDD-C4C4-4593-83C4-DB3F5AEA333B}.Release|x86.Build.0 = Release|Win32
+		{0761C8A5-070F-4CB0-9902-7CC5DE27BF84}.Debug|x64.ActiveCfg = Debug|x64
+		{0761C8A5-070F-4CB0-9902-7CC5DE27BF84}.Debug|x64.Build.0 = Debug|x64
+		{0761C8A5-070F-4CB0-9902-7CC5DE27BF84}.Debug|x86.ActiveCfg = Debug|Win32
+		{0761C8A5-070F-4CB0-9902-7CC5DE27BF84}.Debug|x86.Build.0 = Debug|Win32
+		{0761C8A5-070F-4CB0-9902-7CC5DE27BF84}.Release|x64.ActiveCfg = Release|x64
+		{0761C8A5-070F-4CB0-9902-7CC5DE27BF84}.Release|x64.Build.0 = Release|x64
+		{0761C8A5-070F-4CB0-9902-7CC5DE27BF84}.Release|x86.ActiveCfg = Release|Win32
+		{0761C8A5-070F-4CB0-9902-7CC5DE27BF84}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +52,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3AC342C1-EB63-4C77-A782-56C7CF79AA92} = {65C3965F-7984-4267-A4E7-998C438F89BD}
 		{FC1FFFDD-C4C4-4593-83C4-DB3F5AEA333B} = {8ECFE4D8-0024-4458-AA86-433DFDA5E4E7}
+		{0761C8A5-070F-4CB0-9902-7CC5DE27BF84} = {8ECFE4D8-0024-4458-AA86-433DFDA5E4E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D46B2155-3950-4D3F-91EC-AA0121635DCF}
