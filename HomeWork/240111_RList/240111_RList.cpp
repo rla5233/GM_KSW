@@ -1,189 +1,250 @@
-﻿
-#include <iostream>
-#include <ConsoleEngine/EngineDebug.h>
+﻿#include <iostream>
 #include <list>
+#include <ConsoleEngine/EngineDebug.h>
 
-// 노드형태
 typedef int DataType;
-//template <typename DataType>
+
 class MyList
 {
 private:
-    class Node
-    {
-    public:
-        DataType Data;
-        Node* Next;
-        Node* Prev;
-    };
+	class ListNode
+	{
+	public:
+		DataType Data = DataType();
+		ListNode* Next = nullptr;
+		ListNode* Prev = nullptr;
+	};
+
 
 public:
-    class iterator
-    {
-        friend MyList;
-    public:
-        iterator() {}
-        iterator(Node* _CurNode)
-            : CurNode(_CurNode)
-        {}
+	class iterator
+	{
+		friend MyList;
 
-        bool operator != (const iterator& _Other)
-        {
-            return CurNode != _Other.CurNode;
-        }
+	public:
+		iterator()
+		{}
 
-        DataType& operator*()
-        {
-            return CurNode->Data;
-        }
+		iterator(ListNode* _CurNode)
+			: CurNode(_CurNode)
+		{}
 
-        void operator++()
-        {
-            CurNode = CurNode->Next;
-        }
+		bool operator!=(const iterator& _Other)
+		{
+			return CurNode != _Other.CurNode;
+		}
 
-    private:
-        Node* CurNode = nullptr;
-    };
+		DataType& operator*()
+		{
+			return CurNode->Data;
+		}
 
-    MyList()
-    {
-        Start->Next = End;
-        End->Prev = Start;
-    }
+		// 연산자 겹지정 중에 
+		void operator++()
+		{
+			CurNode = CurNode->Next;
+		}
 
-    ~MyList()
-    {
-        Node* DeleteNode = Start;
-        while (DeleteNode != nullptr)
-        {
-            Node* Next = DeleteNode->Next;
-            delete DeleteNode;
-            DeleteNode = Next;
-        }
-    }
 
-    iterator begin()
-    {
-        return iterator(Start->Next);
-    }
+	private:
+		ListNode* CurNode = nullptr;
+	};
 
-    iterator end()
-    {
-        return iterator(End);
-    }
+	class reverse_iterator
+	{
+		friend MyList;
 
-    // End의 Prev에 새로운 데이터를 넣겠다.
-    void push_back(const DataType& _Data)
-    {
-        Node* NewNode = new Node();
-        NewNode->Data = _Data;
+	public:
+		reverse_iterator()
+		{}
 
-        NewNode->Next = End;
-        NewNode->Prev = End->Prev;
+		reverse_iterator(ListNode* _CurNode)
+			: CurNode(_CurNode)
+		{}
 
-        Node* PrevNode = NewNode->Prev;
-        Node* NextNode = NewNode->Next;
+		bool operator!=(const reverse_iterator& _Other)
+		{
+			return CurNode != _Other.CurNode;
+		}
 
-        PrevNode->Next = NewNode;
-        NextNode->Prev = NewNode;
-    }
+		DataType& operator*()
+		{
+			return CurNode->Data;
+		}
 
-    // Start의 Next에 새로운 데이터를 넣겠다.
-    void push_front(const DataType& _Data)
-    {
-        Node* NewNode = new Node();
-        NewNode->Data = _Data;
+		// 연산자 겹지정 중에 
+		void operator++()
+		{
+			CurNode = CurNode->Prev;
+		}
 
-        NewNode->Prev = Start;
-        NewNode->Next = Start->Next;
 
-        Node* PrevNode = NewNode->Prev;
-        Node* NextNode = NewNode->Next;
+	private:
+		ListNode* CurNode = nullptr;
+	};
 
-        PrevNode->Next = NewNode;
-        NextNode->Prev = NewNode;
-    }
 
-    iterator erase(iterator& _Iter)
-    {
-        if (_Iter.CurNode == Start || _Iter.CurNode == End)
-        {
-            MsgBoxAssert("Delete Range Error.");
-        }
+	MyList()
+	{
+		Start->Next = End;
+		End->Prev = Start;
+	}
 
-        iterator ReturnIter = iterator();
-        if (_Iter.CurNode != nullptr)
-        {
-            ReturnIter = iterator(_Iter.CurNode->Next);
+	~MyList()
+	{
+		ListNode* CurNode = Start;
+		while (CurNode)
+		{
+			ListNode* Next = CurNode->Next;
+			if (nullptr != CurNode)
+			{
+				delete CurNode;
+				CurNode = Next;
+			}
+		}
+	}
 
-            Node* PrevNode = _Iter.CurNode->Prev;
-            Node* NextNode = _Iter.CurNode->Next;
 
-            PrevNode->Next = NextNode;
-            NextNode->Prev = PrevNode;
+	iterator begin()
+	{
+		return iterator(Start->Next);
+	}
 
-            delete _Iter.CurNode;
-            _Iter.CurNode = nullptr;
-        }
+	iterator end()
+	{
+		return iterator(End);
+	}
 
-        return ReturnIter;
-    }
+	reverse_iterator rbegin()
+	{
+		return reverse_iterator(End->Prev);
+	}
+
+	reverse_iterator rend()
+	{
+		return reverse_iterator(Start);
+	}
+
+	// End의 Prev에 새로운 데이터를 넣겠다.
+	void push_back(const DataType& _Data)
+	{
+		ListNode* NewNode = new ListNode();
+		NewNode->Data = _Data;
+
+		NewNode->Next = End;
+		NewNode->Prev = End->Prev;
+
+		ListNode* PrevNode = NewNode->Prev;
+		ListNode* NextNode = NewNode->Next;
+
+		PrevNode->Next = NewNode;
+		NextNode->Prev = NewNode;
+	}
+
+	// Start의 Next에 새로운 데이터를 넣겠다.
+	void push_front(const DataType& _Data)
+	{
+		// 역함수
+		ListNode* NewNode = new ListNode();
+		NewNode->Data = _Data;
+
+		NewNode->Prev = Start;
+		NewNode->Next = Start->Next;
+
+		ListNode* PrevNode = NewNode->Prev;
+		ListNode* NextNode = NewNode->Next;
+
+		PrevNode->Next = NewNode;
+		NextNode->Prev = NewNode;
+
+	}
+
+	iterator erase(iterator& _Iter)
+	{
+		if (_Iter.CurNode == Start)
+		{
+			MsgBoxAssert("Start를 삭제하려고 했습니다.");
+		}
+
+		if (_Iter.CurNode == End)
+		{
+			MsgBoxAssert("End를 삭제하려고 했습니다.");
+		}
+
+		iterator ReturnIter;
+
+		if (nullptr != _Iter.CurNode)
+		{
+			ReturnIter = iterator(_Iter.CurNode->Next);
+
+			ListNode* PrevNode = _Iter.CurNode->Prev;
+			ListNode* NextNode = _Iter.CurNode->Next;
+
+			PrevNode->Next = NextNode;
+			NextNode->Prev = PrevNode;
+
+			if (nullptr != _Iter.CurNode)
+			{
+				delete _Iter.CurNode;
+				_Iter.CurNode = nullptr;
+			}
+		}
+
+		return ReturnIter;
+	}
+
 
 protected:
 
 private:
-    Node* Start = new Node();
-    Node* End = new Node();
+
+	ListNode* Start = new ListNode();
+	ListNode* End = new ListNode();
 };
 
 int main()
 {
-    LeakCheck;
+	LeakCheck;
 
-    {
-        std::cout << "std::list" << std::endl;
-        std::list<int> NewList = std::list<int>();
-        for (int i = 0; i < 5; i++)
-        {
-            NewList.push_back(i);
-            //NewList.push_front(i);
-        }
+	{
+		std::cout << "std 리스트" << std::endl;
+		std::list<int> NewList = std::list<int>();
+		// 0, 1, 2, 3, 4
+		for (int i = 0; i < 5; i++)
+		{
+			NewList.push_back(i);
+			// NewList.push_front();
+		}
 
-        std::list<int>::iterator iter = NewList.begin();
-        for (iter; iter != NewList.end(); ++iter)
-        {
-            std::cout << *iter << std::endl;
-        }
+		std::list<int>::reverse_iterator rStartIter = NewList.rbegin();
+		std::list<int>::reverse_iterator rEndIter = NewList.rend();
 
-        std::list<int>::iterator Erase_iter = NewList.begin();
+		for (/*std::list<int>::iterator StartIter = NewList.begin()*/
+			; rStartIter != rEndIter
+			; ++rStartIter)
+		{
+			std::cout << *rStartIter << std::endl;
+		}
+	}
 
-        // 지워진 노드의 다음 노드를 리턴함
-        Erase_iter = NewList.erase(Erase_iter);
-    }
+	{
+		std::cout << "내 리스트" << std::endl;
+		MyList NewList = MyList();
+		// 0, 1, 2, 3, 4
+		for (int i = 0; i < 5; i++)
+		{
+			NewList.push_back(i);
+			// NewList.push_front();
+		}
 
-    {
-        std::cout << "\nMyList" << std::endl;
-        MyList NewList = MyList();
-        for (int i = 0; i < 5; i++)
-        {
-            NewList.push_back(i);
-            //NewList.push_front(i);
-        }
+		MyList::reverse_iterator rStartIter = NewList.rbegin();
+		MyList::reverse_iterator rEndIter = NewList.rend();
 
-        MyList::iterator iter = NewList.begin();
-        for (iter; iter != NewList.end(); ++iter)
-        {
-            std::cout << *iter << std::endl;
-        }
-
-        MyList::iterator Erase_iter = NewList.begin();
-        Erase_iter = NewList.erase(Erase_iter);
-
-        std::cout << std::endl;
-        for (iter = NewList.begin(); iter != NewList.end(); ++iter)
-        {
-            std::cout << *iter << std::endl;
-        }
-    }
+		for (/*std::list<int>::iterator StartIter = NewList.begin()*/
+			; rStartIter != rEndIter
+			; ++rStartIter)
+		{
+			std::cout << *rStartIter << std::endl;
+		}
+	}
 }
