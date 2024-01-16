@@ -12,8 +12,5 @@ void Body::Update()
 
 	PrevPos = GetPos();
 	NextPos = Front->GetPrevPos();
-	if (Head::GetIsMove())
-	{
-		SetPos(NextPos);
-	}
+	SetPos(NextPos);
 }

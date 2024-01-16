@@ -11,24 +11,9 @@
 //    내가 이동하는 방향의 반대방향으로는 가면 안된다.
 // 2. 내가 이동을 해서 CurBody를 획득했다면 그 다음부터 그 바디는 나를 따라와야 한다.
 
-bool Head::IsMove = false;
-
-void Head::Update()
+void Head::InputCheck()
 {
-	int InputCount = _kbhit();
-	if (0 == InputCount)
-	{
-		IsMove = false;
-		return;
-	}
-
 	int Select = _getch();
-
-	// InputCount = _kbhit();
-
-	// X Y
-	// 1 0
-
 	switch (Select)
 	{
 	case 'A':
@@ -36,9 +21,7 @@ void Head::Update()
 	{
 		if (PrevDir != Right)
 		{
-			AddPos(Left);
 			PrevDir = Left;
-			IsMove = true;
 		}
 		break;
 	}
@@ -47,9 +30,7 @@ void Head::Update()
 	{
 		if (PrevDir != Up)
 		{
-			AddPos(Down);
 			PrevDir = Down;
-			IsMove = true;
 		}
 		break;
 	}
@@ -58,9 +39,7 @@ void Head::Update()
 	{
 		if (PrevDir != Down)
 		{
-			AddPos(Up);
 			PrevDir = Up;
-			IsMove = true;
 		}
 		break;
 	}
@@ -69,9 +48,7 @@ void Head::Update()
 	{
 		if (PrevDir != Left)
 		{
-			AddPos(Right);
 			PrevDir = Right;
-			IsMove = true;
 		}
 		break;
 	}
@@ -83,16 +60,23 @@ void Head::Update()
 	default:
 		break;
 	}
+}
 
+void Head::Move()
+{
+	AddPos(PrevDir);
+	PrevPos = GetPos() - PrevDir;
+}
+
+void Head::EatBodyCheck()
+{
 	if (nullptr == BodyManager::GetCurBody())
 	{
 		MsgBoxAssert("먹을수 있는 바디가 존재하지 않습니다.");
 		return;
 	}
 
-	PrevPos = GetPos() - PrevDir;
 	Body* CurBody = BodyManager::GetCurBody();
-
 	if (CurBody->GetPos() == GetPos())
 	{
 		CurBody->SetFront(LastPart);
@@ -100,4 +84,30 @@ void Head::Update()
 
 		BodyManager::ResetBody();
 	}
+}
+
+void Head::GameEndCheck()
+{
+	if (GetPos().X < 0 || GetPos().X >= GetCore()->Screen.GetScreenX() ||
+		GetPos().Y < 0 || GetPos().Y >= GetCore()->Screen.GetScreenY() )
+	{
+		GetCore()->EngineEnd();
+	}
+}
+
+void Head::Update()
+{
+	Move();
+	GameEndCheck();
+	EatBodyCheck();
+
+	std::cin.clear();
+
+	int InputCount = _kbhit();
+	if (0 == InputCount)
+	{
+		return;
+	}
+
+	InputCheck();
 }

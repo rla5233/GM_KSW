@@ -4,10 +4,10 @@
 class Head : public Part
 {
 public:
-	static bool GetIsMove()
-	{
-		return IsMove;
-	}
+	void InputCheck();
+	void Move();
+	void EatBodyCheck();
+	void GameEndCheck();
 
 protected:
 	void Update() override;
@@ -16,6 +16,5 @@ private:
 	int2 PrevDir = { 0, 0 };
 	Part* LastPart = this;
 
-	static bool IsMove;
 };
 
