@@ -179,4 +179,21 @@ void EngineCore::Start()
         }
         AllUpdateObject.clear();
     }
+    
+    // 매니저 삭제
+    {
+        std::map<int, ConsoleUpdater*>::iterator OrderStartIter = AllManager.begin();
+        std::map<int, ConsoleUpdater*>::iterator OrderEndIter = AllManager.end();
+
+        for (; OrderStartIter != OrderEndIter; ++OrderStartIter)
+        {
+            ConsoleUpdater* Updater = OrderStartIter->second;
+
+            if (nullptr != Updater)
+            {
+                delete Updater;
+                Updater = nullptr;
+            }
+        }
+    }
 }
