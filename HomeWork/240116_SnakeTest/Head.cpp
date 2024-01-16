@@ -1,4 +1,4 @@
-#include "Head.h"
+ï»¿#include "Head.h"
 #include <iostream>
 #include <conio.h>
 #include <ConsoleEngine/EngineCore.h>
@@ -7,9 +7,26 @@
 #include "Body.h"
 
 // 
-// 1. ³»°¡ Æ¯Á¤ ¹æÇâÀ¸·Î ÁøÇàÇß´Ù¸é ´ÙÀ½ ÀÔ·Â¶§´Â ±× ¹İ´ë¹æÇâÀ¸·Î´Â °¥¼ö°¡ ¾ø´Ù.
-//    ³»°¡ ÀÌµ¿ÇÏ´Â ¹æÇâÀÇ ¹İ´ë¹æÇâÀ¸·Î´Â °¡¸é ¾ÈµÈ´Ù.
-// 2. ³»°¡ ÀÌµ¿À» ÇØ¼­ CurBody¸¦ È¹µæÇß´Ù¸é ±× ´ÙÀ½ºÎÅÍ ±× ¹Ùµğ´Â ³ª¸¦ µû¶ó¿Í¾ß ÇÑ´Ù.
+// 1. ë‚´ê°€ íŠ¹ì • ë°©í–¥ìœ¼ë¡œ ì§„í–‰í–ˆë‹¤ë©´ ë‹¤ìŒ ì…ë ¥ë•ŒëŠ” ê·¸ ë°˜ëŒ€ë°©í–¥ìœ¼ë¡œëŠ” ê°ˆìˆ˜ê°€ ì—†ë‹¤.
+//    ë‚´ê°€ ì´ë™í•˜ëŠ” ë°©í–¥ì˜ ë°˜ëŒ€ë°©í–¥ìœ¼ë¡œëŠ” ê°€ë©´ ì•ˆëœë‹¤.
+// 2. ë‚´ê°€ ì´ë™ì„ í•´ì„œ CurBodyë¥¼ íšë“í–ˆë‹¤ë©´ ê·¸ ë‹¤ìŒë¶€í„° ê·¸ ë°”ë””ëŠ” ë‚˜ë¥¼ ë”°ë¼ì™€ì•¼ í•œë‹¤.
+
+void Head::Update()
+{
+	Move();
+	EatBodyCheck();
+	GameEndCheck();
+
+	std::cin.clear();
+
+	int InputCount = _kbhit();
+	if (0 == InputCount)
+	{
+		return;
+	}
+
+	InputCheck();
+}
 
 void Head::InputCheck()
 {
@@ -72,42 +89,36 @@ void Head::EatBodyCheck()
 {
 	if (nullptr == BodyManager::GetCurBody())
 	{
-		MsgBoxAssert("¸ÔÀ»¼ö ÀÖ´Â ¹Ùµğ°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.");
+		MsgBoxAssert("ë¨¹ì„ìˆ˜ ìˆëŠ” ë°”ë””ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 		return;
 	}
 
 	Body* CurBody = BodyManager::GetCurBody();
 	if (CurBody->GetPos() == GetPos())
 	{
-		CurBody->SetFront(LastPart);
-		LastPart = CurBody;
+		int2 LastPos = LastBody->GetPrevPos();
 
+		CurBody->SetFront(LastBody);
+		CurBody->SetPos(LastPos);
+		LastBody = CurBody;
 		BodyManager::ResetBody();
 	}
 }
 
 void Head::GameEndCheck()
 {
+	// í™”ë©´ ì´íƒˆ ì²´í¬
 	if (GetPos().X < 0 || GetPos().X >= GetCore()->Screen.GetScreenX() ||
 		GetPos().Y < 0 || GetPos().Y >= GetCore()->Screen.GetScreenY() )
 	{
 		GetCore()->EngineEnd();
 	}
-}
 
-void Head::Update()
-{
-	Move();
-	GameEndCheck();
-	EatBodyCheck();
-
-	std::cin.clear();
-
-	int InputCount = _kbhit();
-	if (0 == InputCount)
+	// ì¶©ëŒ ì²´í¬
+	ConsoleObject* Object = Collision(0);
+	if (Object != nullptr)
 	{
-		return;
+		GetCore()->EngineEnd();
 	}
-
-	InputCheck();
 }
+

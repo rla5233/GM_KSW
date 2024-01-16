@@ -16,7 +16,7 @@ public:
 	int2 GetPos() const;
 	char GetRenderChar() const;
 
-	inline void SetRenderChar(char _Ch)
+	inline void SetRenderChar(unsigned char _Ch)
 	{
 		RenderChar = _Ch;
 	}
@@ -45,7 +45,7 @@ protected:
 private:
 
 	int2 Pos = { 0, 0 };
-	char RenderChar = '@';
+	unsigned char RenderChar = '@';
 };
 
 

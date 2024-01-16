@@ -29,7 +29,6 @@ char ConsoleObject::GetRenderChar() const
 }
 
 
-
 ConsoleObject* ConsoleObject::Collision(int _UpdateOrder)
 {
     std::list<ConsoleObject*>& ObjectList = GetCore()->AllUpdateObject[_UpdateOrder];
