@@ -1,6 +1,8 @@
 #include "Head.h"
+#include <iostream>
 #include <conio.h>
 #include <ConsoleEngine/EngineCore.h>
+
 #include "BodyManager.h"
 #include "Body.h"
 
@@ -9,11 +11,14 @@
 //    내가 이동하는 방향의 반대방향으로는 가면 안된다.
 // 2. 내가 이동을 해서 CurBody를 획득했다면 그 다음부터 그 바디는 나를 따라와야 한다.
 
+bool Head::IsMove = false;
+
 void Head::Update()
 {
 	int InputCount = _kbhit();
 	if (0 == InputCount)
 	{
+		IsMove = false;
 		return;
 	}
 
@@ -33,6 +38,7 @@ void Head::Update()
 		{
 			AddPos(Left);
 			PrevDir = Left;
+			IsMove = true;
 		}
 		break;
 	}
@@ -43,6 +49,7 @@ void Head::Update()
 		{
 			AddPos(Down);
 			PrevDir = Down;
+			IsMove = true;
 		}
 		break;
 	}
@@ -53,6 +60,7 @@ void Head::Update()
 		{
 			AddPos(Up);
 			PrevDir = Up;
+			IsMove = true;
 		}
 		break;
 	}
@@ -63,6 +71,7 @@ void Head::Update()
 		{
 			AddPos(Right);
 			PrevDir = Right;
+			IsMove = true;
 		}
 		break;
 	}
@@ -81,13 +90,14 @@ void Head::Update()
 		return;
 	}
 
+	PrevPos = GetPos() - PrevDir;
 	Body* CurBody = BodyManager::GetCurBody();
 
 	if (CurBody->GetPos() == GetPos())
 	{
-		
-		Back = CurBody;
-		CurBody->SetFront(this);
+		CurBody->SetFront(LastPart);
+		LastPart = CurBody;
+
 		BodyManager::ResetBody();
 	}
 }

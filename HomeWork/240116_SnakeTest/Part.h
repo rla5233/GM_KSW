@@ -7,13 +7,13 @@ public:
 	void SetBack(Part* const _Back);
 	void SetFront(Part* const _Front);
 
-	void SetCurPos(int2 _Pos);
+	inline int2 GetPrevPos() const { return PrevPos; }
 
 protected:
 	Part* Front = nullptr;
 	Part* Back = nullptr;
 
-	//int2 NextPos = { 0, 0 };
-	int2 CurPos = { 0, 0 };
+	int2 PrevPos = { 0, 0 };
+	int2 NextPos = { 0, 0 };
 };
 

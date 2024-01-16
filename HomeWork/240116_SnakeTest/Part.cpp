@@ -20,8 +20,3 @@ void Part::SetFront(Part* const _Front)
 
 	Front = _Front;
 }
-
-void Part::SetCurPos(int2 _Pos)
-{
-
-}

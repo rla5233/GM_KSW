@@ -1,4 +1,7 @@
 #include "Body.h"
+#include "conio.h"
+
+#include "Head.h"
 
 void Body::Update()
 {
@@ -7,5 +10,10 @@ void Body::Update()
 		return;
 	}
 
-	SetPos(Front->GetPos());
+	PrevPos = GetPos();
+	NextPos = Front->GetPrevPos();
+	if (Head::GetIsMove())
+	{
+		SetPos(NextPos);
+	}
 }
