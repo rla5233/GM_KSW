@@ -1,81 +1,94 @@
 #include "ConsoleScreen.h"
 
+// std 및 플랫폼 헤더
 #include <iostream>
+#include <Windows.h>
+#include <assert.h>
+#include <conio.h>
 
+// 자체 헤더
 #include "ConsoleObject.h"
 
 ConsoleScreen::ConsoleScreen()
-{}
+{
 
+}
 ConsoleScreen::~ConsoleScreen()
 {
 	ReleaseScreen();
 }
 
-void ConsoleScreen::CreateScreen(int _ScreenX, int _ScreenY)
+void ConsoleScreen::CreateScreen(/*&NewScreen => this, */int _ScreenX, int _ScreenY)
 {
 	ReleaseScreen();
 
-	if (_ScreenX <= 0)
+	if (0 >= _ScreenX)
 	{
-		MsgBoxAssert("Wrong range : ScreenX");
+		MsgBoxAssert("스크린 X크기가 0이기 때문에 콘솔 스크린을 만들수 없습니다");
 	}
 
-	if (_ScreenY <= 0)
+	if (0 >= _ScreenY)
 	{
-		MsgBoxAssert("Wrong range : ScreenY");
+		MsgBoxAssert("스크린 Y크기가 0이기 때문에 콘솔 스크린을 만들수 없습니다");
 	}
 
-	m_ScreenX = _ScreenX;
-	m_ScreenY = _ScreenY;
+	/*this->*/ScreenX = _ScreenX;
+	/*this->*/ScreenY = _ScreenY;
 
-	if (m_ScreenData != nullptr)
+	if (0 != ScreenData.size())
 	{
-		MsgBoxAssert("Alreay Exist Memory");
+		MsgBoxAssert("이미 스크린을 만든 상태에서 다시 만들어졌습니다");
 	}
 
-	m_ScreenData = new char* [m_ScreenY];
+	// std::vector<char>* Ptr = new std::vector<char>[ScreenY];
 
-	if (m_ScreenData == nullptr)
+	ScreenData.resize(ScreenY);
+	// ScreenData = new char* [ScreenY];
+	if (0 == ScreenData.size())
 	{
-		MsgBoxAssert("Failed Create Memory");
+		MsgBoxAssert("스크린 생성에 실패했습니다. if (nullptr == ScreenData)");
 	}
 
-	for (int y = 0; y < m_ScreenY; y++)
+	for (int y = 0; y < ScreenY; y++)
 	{
-		m_ScreenData[y] = new char[m_ScreenX + 2] { 0, };
+		ScreenData[y].resize(ScreenX + 2);
+		// ScreenData[y] = new char[ScreenX + 2] {0,};
 
-		for (int x = 0; x < m_ScreenX; x++)
+		if (0 == ScreenData[y].size())
 		{
-			m_ScreenData[y][x] = '*';
+			MsgBoxAssert("스크린 생성에 실패했습니다. if (nullptr == ScreenData[y])");
 		}
-
-		m_ScreenData[y][m_ScreenX] = '\n';
 	}
 
 	ClearScreen();
 
 	// 함수가 실행되면 스택에 그 함수 이름의 메모리를 그리면
 	// 맴버함수는 실행되면 내부에 this가 있다는것을 기억해야 한다.
+	// new를 하면 생각할 필요 없다. 일단 영역을 그려야 한다.
+
 }
 
 void ConsoleScreen::ReleaseScreen()
 {
-	// 지울 때는 역순으로 지운다.
-	for (int y = 0; y < m_ScreenY; y++)
-	{
-		if (m_ScreenData[y] != nullptr)
-		{
-			delete[] m_ScreenData[y];
-			m_ScreenData[y] = nullptr;
-		}
-	}
+	ScreenData.clear();
 
-	if (m_ScreenData != nullptr)
-	{
-		delete m_ScreenData;
-		m_ScreenData = nullptr;
-	}
+	// 지울때는 역순으로 지워야 한다.
+	//for (int y = 0; y < ScreenY; y++)
+	//{
+	//	if (nullptr == ScreenData[y])
+	//	{
+	//		continue;
+	//	}
+
+	//	delete[] ScreenData[y];
+	//	ScreenData[y] = nullptr;
+	//}
+
+	//if (nullptr != ScreenData)
+	//{
+	//	delete[] ScreenData;
+	//	ScreenData = nullptr;
+	//}
 }
 
 void ConsoleScreen::SetChar(const ConsoleObject& _Object)
@@ -100,28 +113,36 @@ void ConsoleScreen::SetChar(const int2& _Pos, char _Char)
 		return;
 	}
 
-	if (m_ScreenX <= _Pos.X)
+	if (ScreenX <= _Pos.X)
 	{
 		return;
 	}
 
-	if (m_ScreenY <= _Pos.Y)
+	if (ScreenY <= _Pos.Y)
 	{
 		return;
 	}
 
-	m_ScreenData[_Pos.Y][_Pos.X] = _Char;
+	ScreenData[_Pos.Y][_Pos.X] = _Char;
 }
 
 void ConsoleScreen::ClearScreen()
 {
-	for (int y = 0; y < m_ScreenY; y++)
+	// char** ScreenData
+	// char* ScreenData[0]
+	// char ScreenData[0][0]
+
+	// char** ScreenData
+	// char* *ScreenData
+	// char **ScreenData
+
+	for (int y = 0; y < ScreenY; y++)
 	{
-		for (int x = 0; x < m_ScreenX; x++)
+		for (int x = 0; x < ScreenX; x++)
 		{
-			m_ScreenData[y][x] = '*';
+			ScreenData[y][x] = '*';
 		}
-		m_ScreenData[y][m_ScreenX] = '\n';
+		ScreenData[y][ScreenX] = '\n';
 	}
 }
 
@@ -129,14 +150,17 @@ void ConsoleScreen::PrintScreen()
 {
 	system("cls");
 
-	for (int y = 0; y < m_ScreenY; y++)
+	for (int y = 0; y < ScreenY; y++)
 	{
-		if (nullptr == m_ScreenData[y])
+		if (0 == ScreenData[y].size())
 		{
-			MsgBoxAssert("Print Range Error.");
+			MsgBoxAssert("존재하지 않은 라인을 출력하려고 했습니다");
 		}
 
-		printf_s(m_ScreenData[y]);
+		std::vector<char>& Vector = ScreenData[y];
+		char& FirstChar = Vector[0];
+		char* PrintPtr = &FirstChar;
+		printf_s(PrintPtr);
 	}
 
 	ClearScreen();
