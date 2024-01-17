@@ -1,6 +1,7 @@
 ﻿#include "Head.h"
 #include <iostream>
 #include <conio.h>
+#include <windows.h>
 #include <ConsoleEngine/EngineCore.h>
 
 #include "BodyManager.h"
@@ -13,7 +14,6 @@
 
 void Head::Update()
 {
-
 	Move();
 
 	EatBodyCheck();
@@ -24,13 +24,45 @@ void Head::Update()
 
 void Head::InputCheck()
 {
-	
 	int InputCount = _kbhit();
 	if (0 == InputCount)
 	{
 		return;
 	}	
-	
+
+	//if (GetAsyncKeyState('A'))
+	//{
+	//	if (PrevDir != Right)
+	//	{
+	//		PrevDir = Left;
+	//	}
+	//}
+	//else if (GetAsyncKeyState('S'))
+	//{
+	//	if (PrevDir != Up)
+	//	{
+	//		PrevDir = Down;
+	//	}
+	//}
+	//else if (GetAsyncKeyState('W'))
+	//{
+	//	if (PrevDir != Down)
+	//	{
+	//		PrevDir = Up;
+	//	}
+	//}
+	//else if (GetAsyncKeyState('D'))
+	//{
+	//	if (PrevDir != Left)
+	//	{
+	//		PrevDir = Right;
+	//	}			
+	//}
+	//else if (GetAsyncKeyState('1'))
+	//{
+	//	GetCore()->EngineEnd();
+	//}
+
 	int Select = _getch();
 	switch (Select)
 	{
@@ -94,13 +126,14 @@ void Head::EatBodyCheck()
 		return;
 	}
 
+	// 바디 획득
 	Body* CurBody = BodyManager::GetCurBody();
 	if (CurBody->GetPos() == GetPos())
 	{
-		int2 LastPos = LastBody->GetPrevPos();
+		int2 BodyStartPos = LastBody->GetPrevPos();
 
 		CurBody->SetFront(LastBody);
-		CurBody->SetPos(LastPos);
+		CurBody->SetPos(BodyStartPos);
 		LastBody = CurBody;
 		BodyManager::ResetBody();
 	}
