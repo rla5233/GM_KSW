@@ -7,7 +7,9 @@ public:
 	void InputCheck();
 	void Move();
 	void EatBodyCheck();
-	void GameEndCheck();
+
+	void MapOutCheck();
+	void BodyCollisionCheck();
 
 protected:
 	void Update() override;
@@ -16,7 +18,6 @@ private:
 	int2 PrevDir = { 0, 0 };
 	Part* LastBody = this;
 
-	int MoveTime = 0;
-	int MoveDelay = 10;
+	int BodyCount = 0;
 };
 

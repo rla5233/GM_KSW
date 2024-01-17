@@ -14,9 +14,11 @@
 
 void Head::Update()
 {
-	EatBodyCheck();
-	GameEndCheck();
 	Move();
+	MapOutCheck();
+
+	EatBodyCheck();
+	BodyCollisionCheck();
 	
 	InputCheck();
 }
@@ -129,6 +131,7 @@ void Head::EatBodyCheck()
 	Body* CurBody = BodyManager::GetCurBody();
 	if (CurBody->GetPos() == GetPos())
 	{
+		++BodyCount;
 		int2 BodyStartPos = LastBody->GetPrevPos();
 
 		CurBody->SetFront(LastBody);
@@ -138,20 +141,26 @@ void Head::EatBodyCheck()
 	}
 }
 
-void Head::GameEndCheck()
+void Head::MapOutCheck()
 {
 	// 화면 이탈 체크
 	if (GetPos().X < 1 || GetPos().X >= GetCore()->Screen.GetScreenX() - 1 ||
-		GetPos().Y < 1 || GetPos().Y >= GetCore()->Screen.GetScreenY() - 1 )
+		GetPos().Y < 1 || GetPos().Y >= GetCore()->Screen.GetScreenY() - 1)
 	{
 		GetCore()->EngineEnd();
 	}
+}
 
-	// 충돌 체크
-	ConsoleObject* Object = Collision(0);
-	if (Object != nullptr)
+void Head::BodyCollisionCheck()
+{
+	if (BodyCount > 3)
 	{
-		GetCore()->EngineEnd();
+		// 충돌 체크
+		ConsoleObject* Object = Collision(0);
+		if (Object != nullptr)
+		{
+			GetCore()->EngineEnd();
+		}
 	}
 }
 
