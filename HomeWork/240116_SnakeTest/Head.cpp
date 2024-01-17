@@ -13,23 +13,24 @@
 
 void Head::Update()
 {
+
 	Move();
+
 	EatBodyCheck();
 	GameEndCheck();
-
-	std::cin.clear();
-
-	int InputCount = _kbhit();
-	if (0 == InputCount)
-	{
-		return;
-	}
-
+	
 	InputCheck();
 }
 
 void Head::InputCheck()
 {
+	
+	int InputCount = _kbhit();
+	if (0 == InputCount)
+	{
+		return;
+	}	
+	
 	int Select = _getch();
 	switch (Select)
 	{
