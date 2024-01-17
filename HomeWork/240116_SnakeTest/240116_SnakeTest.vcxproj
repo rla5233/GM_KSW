@@ -148,7 +148,6 @@
     <ClCompile Include="BodyManager.cpp" />
     <ClCompile Include="GlobalValue.cpp" />
     <ClCompile Include="Head.cpp" />
-    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Part.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +155,6 @@
     <ClInclude Include="BodyManager.h" />
     <ClInclude Include="GlobalValue.h" />
     <ClInclude Include="Head.h" />
-    <ClInclude Include="Map.h" />
     <ClInclude Include="Part.h" />
   </ItemGroup>
   <ItemGroup>

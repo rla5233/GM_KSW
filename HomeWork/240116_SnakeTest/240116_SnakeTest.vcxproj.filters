@@ -7,7 +7,6 @@
     <ClCompile Include="GlobalValue.cpp" />
     <ClCompile Include="Head.cpp" />
     <ClCompile Include="Part.cpp" />
-    <ClCompile Include="Map.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Body.h" />
@@ -15,6 +14,5 @@
     <ClInclude Include="GlobalValue.h" />
     <ClInclude Include="Head.h" />
     <ClInclude Include="Part.h" />
-    <ClInclude Include="Map.h" />
   </ItemGroup>
 </Project>
