@@ -1,13 +1,11 @@
 ﻿#include "Head.h"
 #include <iostream>
 #include <conio.h>
-#include <windows.h>
 #include <ConsoleEngine/EngineCore.h>
 
 #include "BodyManager.h"
 #include "Body.h"
 
-// 
 // 1. 내가 특정 방향으로 진행했다면 다음 입력때는 그 반대방향으로는 갈수가 없다.
 //    내가 이동하는 방향의 반대방향으로는 가면 안된다.
 // 2. 내가 이동을 해서 CurBody를 획득했다면 그 다음부터 그 바디는 나를 따라와야 한다.
