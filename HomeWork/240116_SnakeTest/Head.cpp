@@ -14,10 +14,9 @@
 
 void Head::Update()
 {
-	Move();
-
 	EatBodyCheck();
 	GameEndCheck();
+	Move();
 	
 	InputCheck();
 }
