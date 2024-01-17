@@ -108,8 +108,8 @@ void Head::EatBodyCheck()
 void Head::GameEndCheck()
 {
 	// 화면 이탈 체크
-	if (GetPos().X < 0 || GetPos().X >= GetCore()->Screen.GetScreenX() ||
-		GetPos().Y < 0 || GetPos().Y >= GetCore()->Screen.GetScreenY() )
+	if (GetPos().X < 1 || GetPos().X >= GetCore()->Screen.GetScreenX() - 1 ||
+		GetPos().Y < 1 || GetPos().Y >= GetCore()->Screen.GetScreenY() - 1 )
 	{
 		GetCore()->EngineEnd();
 	}
